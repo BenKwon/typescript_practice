@@ -1,76 +1,73 @@
 /**
- (실습1) Car 클래스를 만들고 싶습니다.
+ * (실습1) interface 이용해서 간단하게 타입을 만들어봅시다
+/** */
+// let 상품 = { brand : 'Samsung', serialNumber : 1360, model : ['TV', 'phone'] }
+/** 
+이런 변수가 있는데 interface 키워드로 타입지정 이쁘게 하고 싶습니다. 어떻게 코드를 짜면 될까요?
+무슨 타입일지는 알아서 기입합시다. 
 
-1. 대충 { model : '소나타', price : 3000 } 이렇게 생긴 object를 복사해주는 class를 만들어보십시오.
+ */
+interface Product {
+    brand: string,
+    serialNumber: number,
+    model: string[]
+}
+let 상품: Product = { brand: 'Samsung', serialNumber: 1360, model: ['TV', 'phone'] }
 
-2. 그리고 복사된 object 자료들은 .tax() 라는 함수를 사용가능한데 현재 object에 저장된 price의 10분의1을 출력해주어야합니다. 
+/**
+ 실습2) array 안에 object 여러개가 필요합니다.
 
-3. model과 price 속성의 타입지정도 알아서 잘 해보십시오. tax() 함수의 return 타입도요. 
+쇼핑몰 장바구니를 구현하려고 하는데 
+
+let 장바구니 = [ { product : '청소기', price : 7000 }, { product : '삼다수', price : 800 } ] 
+이렇게 생긴 object들이 잔뜩 들어갈 수 있는 array는 어떻게 타입을 지정해야할까요? 
+
+오늘 배운 interface 문법을 써봅시다.
 
  
  */
-
-class Car{
-    model;
-    price;
-    constructor(model:string, price:number){
-        this.model = model;
-        this.price = price;
-    }
-
-    tax():number{
-        return this.price/0.1;
-    }
+interface Cart {
+    product: string,
+    price: number
 }
+
+let 장바구니: Cart[] = [{ product: '청소기', price: 7000 }, { product: '삼다수', price: 800 }]
 
 /**
-(숙제2) class인데 파라미터가 잔뜩 들어가는 class Word를 만들어봅시다.
+(실습3) 위에서 만든 타입을 extends 해봅시다.
 
-1. object 만들 때 new Word() 소괄호 안에 숫자 혹은 문자를 입력하면 
+갑자기 서비스가 업데이트되어서 일부 상품은 card 속성이 들어가야합니다. 
 
-2. 숫자는 전부 object 안의  num 속성 안에 array 형태로 저장되고 
-
-3. 문자는 전부 object 안의 str 속성 안에 array 형태로 저장되는 class를 만들어봅시다.
-
-4. class 만들 때 넣을 수 있는 숫자와 문자 갯수는 일단 제한은 없습니다. 그리고 타입 빼먹지 마셈 
+{ product : '청소기', price : 7000, card : false }
+위에서 만든 interface를 extends 해서 이 object의 타입을 만들어보십시오.
  */
-class Word{
-    num:number[] = [];
-    str:string[] = [];
-    constructor(...x:(number | string)[]){
-        x.forEach(elem =>{
-            if(typeof elem === "string"){
-                this.str.push(elem);
-            }else{
-                this.num.push(elem);
-            }
-        })
-    }
+
+interface newCart extends Cart {
+    card: boolean
+}
+let 장바구니2: newCart[] = [{ product: '청소기', price: 7000, card: true }, { product: '삼다수', price: 800, card: false }];
+
+/**
+ (실습4) object 안에 함수를 2개 넣고 싶은데요 
+
+1. 이 object 자료는 plus() 함수를 내부에 가지고 있으며 plus 함수는 파라미터 2개를 입력하면 더해서 return 해줍니다. 
+
+2. 이 object 자료는 minus() 함수를 내부에 가지고 있으며 minus 함수는 파라미터 2개를 입력하면 빼서 return 해줍니다. 
+
+이 object 자료를 어떻게 만들면 될까요? 
+
+interface를 이용해서 object에 타입지정도 해보십시오. 
+ 
+ */
+
+interface Calculator{
+    plus(a:number, b:number):number,
+    minus(a:number, b:number):number,
+}
+let pratice4:Calculator = {
+    plus: (a, b) => a + b,
+    minus: (a, b) => a - b
 }
 
-let obj = new Word('kim', 3, 5, 'park');
-console.log(obj.num) //[3,5]
-console.log(obj.str) //['kim', 'park']
-
-
-class Word2{
-    num;
-    str;
-  
-    constructor(...param){
-      let 숫자들 :number[] = [];
-      let 문자들 :string[] = [];
-  
-      param.forEach((i)=>{
-        if (typeof i ==='string') {
-          문자들.push(i)
-        } else {
-          숫자들.push(i)
-        }
-      })
-  
-      this.num = 숫자들;
-      this.str = 문자들;
-    }
-}
-  
+pratice4.plus("a",3); //error
+pratice4.plus(3,3); // correct
