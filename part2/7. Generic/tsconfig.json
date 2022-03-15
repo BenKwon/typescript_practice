@@ -3,5 +3,4 @@
         "target": "es6",
         "module": "commonjs"
     },
-    "include": ["../3.함수에 사용하는  never 타입/숙제.ts"]
 }
